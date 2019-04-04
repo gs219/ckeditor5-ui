@@ -128,6 +128,12 @@ export default class ColorGridView extends View {
 				item.isOn = item.color === selectedColor;
 			}
 		} );
+
+		this.items.on( 'add', ( evt, item ) => {
+			if ( item.color === this.selectedColor ) {
+				item.isOn = true;
+			}
+		} );
 	}
 
 	/**
