@@ -142,6 +142,28 @@ describe( 'ColorGridView', () => {
 		} );
 	} );
 
+	describe( 'items collection', () => {
+		it( 'should set isOn property when needed after adding new item', () => {
+			view.selectedColor = '#123456';
+			const colorTile = new ColorTileView();
+
+			colorTile.set( {
+				color: '#123456',
+				label: 'Awesome color',
+				tooltip: true,
+				options: {
+					hasBorder: false
+				}
+			} );
+
+			expect( view.items.last.isOn ).to.be.false;
+
+			view.items.add( colorTile );
+
+			expect( view.items.last.isOn ).to.be.true;
+		} );
+	} );
+
 	describe( 'focus', () => {
 		it( 'focuses the tile in DOM', () => {
 			const spy = sinon.spy( view.items.first, 'focus' );
