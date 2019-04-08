@@ -13,6 +13,7 @@ import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
 import FocusCycler from '../focuscycler';
 import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 import '../../theme/components/colorgrid/colorgrid.css';
+import Template from '../template';
 
 /**
  * A grid of {@link module:ui/colorgrid/colortile~ColorTileView color tiles}.
@@ -28,6 +29,7 @@ export default class ColorGridView extends View {
 	 * @param {Array.<module:ui/colorgrid/colorgrid~ColorDefinition>} [options.colorDefinitions] Array with definitions
 	 * required to create the {@link module:ui/colorgrid/colortile~ColorTileView tiles}.
 	 * @param {Number} options.columns A number of columns to display the tiles.
+	 * @param {String} options.recentlyUsedLabel A label for a color grid.
 	 */
 	constructor( locale, options ) {
 		super( locale );
@@ -35,13 +37,24 @@ export default class ColorGridView extends View {
 		const colorDefinitions = options && options.colorDefinitions || [];
 		const viewStyleAttribute = {};
 
-		if ( options && options.columns ) {
-			viewStyleAttribute.gridTemplateColumns = `repeat( ${ options.columns }, 1fr)`;
-		}
+		/**
+		 * Number of columns in the color grid
+		 *
+		 * @type {Number}
+		 */
+		this.columns = options.columns;
+
+		/**
+		 * The label used to describe given color grid.
+		 *
+		 * @type {String}
+		 */
+		this.recentlyUsedLabel = options.recentlyUsedLabel;
 
 		/**
 		 * The color of the currently selected color tile in {@link #items}.
 		 *
+		 * @member {module:ui/colorgrid~ColorGridView#selectedColor}
 		 * @type {String}
 		 */
 		this.set( 'selectedColor' );
@@ -111,9 +124,14 @@ export default class ColorGridView extends View {
 			this.items.add( colorTile );
 		} );
 
+		const children = [ this.generateItemsTemplate() ];
+		if ( this.recentlyUsedLabel ) {
+			children.unshift( this.generateLabelTemplate() );
+		}
+
 		this.setTemplate( {
 			tag: 'div',
-			children: this.items,
+			children,
 			attributes: {
 				class: [
 					'ck',
@@ -175,6 +193,37 @@ export default class ColorGridView extends View {
 
 		// Start listening for the keystrokes coming from #element.
 		this.keystrokes.listenTo( this.element );
+	}
+
+	generateItemsTemplate() {
+		return new Template( {
+			tag: 'div',
+			children: this.items,
+			attributes: {
+				class: [
+					'ck',
+					'ck-color-grid__items'
+				],
+				style: {
+					gridTemplateColumns: `repeat( ${ this.columns }, 1fr)`
+				}
+			}
+		} );
+	}
+
+	generateLabelTemplate() {
+		return new Template( {
+			tag: 'div',
+			children: [
+				this.recentlyUsedLabel
+			],
+			attributes: {
+				class: [
+					'ck',
+					'ck-color-grid__label'
+				]
+			}
+		} );
 	}
 }
 
