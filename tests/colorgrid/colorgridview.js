@@ -59,18 +59,17 @@ describe( 'ColorGridView', () => {
 		} );
 
 		it( 'uses the options#columns to control the grid', () => {
-			const view = new ColorGridView( locale, { columns: 3 } );
-			view.render();
+			const viewWithColumns = new ColorGridView( locale, { columns: 3 } );
+			viewWithColumns.render();
 
-			expect( view.element.style.gridTemplateColumns ).to.equal( '1fr 1fr 1fr' );
+			expect( viewWithColumns.element.firstChild.style.gridTemplateColumns ).to.equal( '1fr 1fr 1fr' );
 
-			view.destroy();
+			viewWithColumns.destroy();
 		} );
 
 		it( 'creates the view without provided color definitions', () => {
 			const view = new ColorGridView( locale );
 			view.render();
-
 			expect( view.items ).to.have.length( 0 );
 
 			view.destroy();
@@ -105,7 +104,7 @@ describe( 'ColorGridView', () => {
 			expect( view.items.get( 2 ).isOn ).to.be.false;
 		} );
 
-		describe( 'add colors from definition as child items', () => {
+		describe( 'add colors from definition as child item', () => {
 			it( 'has proper number of elements', () => {
 				expect( view.items.length ).to.equal( 3 );
 			} );
@@ -119,6 +118,20 @@ describe( 'ColorGridView', () => {
 						expect( colorTile.color ).to.equal( color.color );
 					} );
 				} );
+			} );
+		} );
+
+		describe( 'add label from definition as child item', () => {
+			let viewWithLabel;
+			beforeEach( () => {
+				viewWithLabel = new ColorGridView( locale, { colorDefinitions, recentlyUsedLabel: 'Recently used:' } );
+				viewWithLabel.render();
+			} );
+			afterEach( () => {
+				viewWithLabel.destroy();
+			} );
+			it( 'Recently used label is add to color grid', () => {
+				expect( viewWithLabel.element.firstChild.innerText ).to.equal( 'Recently used:' );
 			} );
 		} );
 	} );

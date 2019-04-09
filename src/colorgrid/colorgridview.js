@@ -42,14 +42,14 @@ export default class ColorGridView extends View {
 		 *
 		 * @type {Number}
 		 */
-		this.columns = options.columns;
+		this.columns = options && options.columns;
 
 		/**
 		 * The label used to describe given color grid.
 		 *
 		 * @type {String}
 		 */
-		this.recentlyUsedLabel = options.recentlyUsedLabel;
+		this.recentlyUsedLabel = options && options.recentlyUsedLabel;
 
 		/**
 		 * The color of the currently selected color tile in {@link #items}.
@@ -66,6 +66,15 @@ export default class ColorGridView extends View {
 		 * @member {module:ui/viewcollection~ViewCollection}
 		 */
 		this.items = this.createCollection();
+
+		/**
+		 * Array of {@link module:ui/template~Template} rendered directly in color grid. If {@link #recentlyUsedLabel} is defined,
+		 * then additionally to items section, there will be rendered label for given color grid.
+		 *
+		 * @readonly
+		 * @type {Array.<module:ui/template~Template>}
+		 */
+		this.children = [];
 
 		/**
 		 * Tracks information about DOM focus in the grid.
@@ -124,14 +133,14 @@ export default class ColorGridView extends View {
 			this.items.add( colorTile );
 		} );
 
-		const children = [ this.generateItemsTemplate() ];
 		if ( this.recentlyUsedLabel ) {
-			children.unshift( this.generateLabelTemplate() );
+			this.children.push( this.generateLabelTemplate() );
 		}
+		this.children.push( this.generateItemsTemplate() );
 
 		this.setTemplate( {
 			tag: 'div',
-			children,
+			children: this.children,
 			attributes: {
 				class: [
 					'ck',
@@ -195,7 +204,18 @@ export default class ColorGridView extends View {
 		this.keystrokes.listenTo( this.element );
 	}
 
+	/**
+	 * Helper method, which returns template containing collection of {@link module:ui/colorgrid/colortile~ColorTileView}.
+	 *
+	 * @private
+	 * @returns {module:ui/template~Template} Template with collection of {@link module:ui/colorgrid/colortile~ColorTileView}.
+	 */
 	generateItemsTemplate() {
+		const style = {};
+		if ( this.columns !== undefined ) {
+			style.gridTemplateColumns = `repeat( ${ this.columns }, 1fr)`;
+		}
+
 		return new Template( {
 			tag: 'div',
 			children: this.items,
@@ -204,13 +224,17 @@ export default class ColorGridView extends View {
 					'ck',
 					'ck-color-grid__items'
 				],
-				style: {
-					gridTemplateColumns: `repeat( ${ this.columns }, 1fr)`
-				}
+				style
 			}
 		} );
 	}
 
+	/**
+	 * Helper method return template with label for color grid.
+	 *
+	 * @private
+	 * @returns {module:ui/template~Template} Template with label for color grid.
+	 */
 	generateLabelTemplate() {
 		return new Template( {
 			tag: 'div',
