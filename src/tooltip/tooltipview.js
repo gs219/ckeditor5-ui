@@ -20,8 +20,8 @@ export default class TooltipView extends View {
 	/**
 	 * @inheritDoc
 	 */
-	constructor( locale ) {
-		super( locale );
+	constructor(locale) {
+		super(locale);
 
 		/**
 		 * The text of the tooltip visible to the user.
@@ -29,7 +29,7 @@ export default class TooltipView extends View {
 		 * @observable
 		 * @member {String} #text
 		 */
-		this.set( 'text', '' );
+		this.set('text', '');
 
 		/**
 		 * The position of the tooltip (south or north).
@@ -50,18 +50,18 @@ export default class TooltipView extends View {
 		 * @default 's'
 		 * @member {'s'|'n'} #position
 		 */
-		this.set( 'position', 's' );
+		this.set('position', 'n');
 
 		const bind = this.bindTemplate;
 
-		this.setTemplate( {
+		this.setTemplate({
 			tag: 'span',
 			attributes: {
 				class: [
 					'ck',
 					'ck-tooltip',
-					bind.to( 'position', position => 'ck-tooltip_' + position ),
-					bind.if( 'text', 'ck-hidden', value => !value.trim() )
+					bind.to('position', position => 'ck-tooltip_' + position),
+					bind.if('text', 'ck-hidden', value => !value.trim())
 				]
 			},
 			children: [
@@ -69,19 +69,16 @@ export default class TooltipView extends View {
 					tag: 'span',
 
 					attributes: {
-						class: [
-							'ck',
-							'ck-tooltip__text'
-						]
+						class: ['ck', 'ck-tooltip__text']
 					},
 
 					children: [
 						{
-							text: bind.to( 'text' ),
+							text: bind.to('text')
 						}
 					]
 				}
 			]
-		} );
+		});
 	}
 }

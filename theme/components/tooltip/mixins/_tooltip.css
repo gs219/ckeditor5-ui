@@ -27,7 +27,7 @@
 		 *
 		 * More in https://github.com/ckeditor/ckeditor5/issues/920.
 		 */
-		@media (hover:none) {
+		@media (hover: none) {
 			display: none;
 		}
 	}
@@ -49,6 +49,6 @@
 @define-mixin ck-tooltip_visible {
 	& .ck-tooltip {
 		visibility: visible;
-		opacity: 1;
+		opacity: 0.6;
 	}
 }

@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-@import "../tooltip/mixins/_tooltip.css";
+@import '../tooltip/mixins/_tooltip.css';
 
 .ck.ck-dropdown {
 	display: inline-block;
@@ -37,6 +37,7 @@
 
 		&.ck-dropdown__panel-visible {
 			display: inline-block;
+			transition: display 0.15s linear;
 
 			/* This will prevent blurry icons in dropdown on Firefox. See #340. */
 			will-change: transform;
@@ -49,7 +50,7 @@
 
 		&.ck-dropdown__panel_se,
 		&.ck-dropdown__panel_sw {
-			transform: translate3d( 0, 100%, 0 );
+			transform: translate3d(0, 100%, 0);
 		}
 
 		&.ck-dropdown__panel_ne,
