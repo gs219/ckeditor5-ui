@@ -9,7 +9,6 @@
 	@mixin ck-unselectable;
 
 	display: flex;
-	flex-flow: row wrap;
 	align-items: center;
 
 	&.ck-toolbar_vertical {
